@@ -1,7 +1,7 @@
 # Análise de Sentimento e Retorno de Ações Brasileiras
 
 ## Visão Geral
-Este projeto realiza uma análise abrangente de ações brasileiras, combinando web scraping, análise de sentimento de notícias e análise de retornos financeiros. O objetivo é investigar a relação entre o sentimento das notícias e o desempenho das ações no mercado brasileiro.
+Este projeto realiza uma análise abrangente de ações brasileiras, combinando web scraping, análise de sentimento de notícias e análise de retornos financeiros. O objetivo é investigar a relação entre o sentimento das notícias e o desempenho das ações no mercado brasileiro. O projeto foca no site FinViz, pois o mesmo possui uma distribuição de notícias relacionadas à ações em formato de tabela, com uma distribuição por tickers, facilitando assim o processo de extração de dados. 
 
 ## Estrutura do Projeto
 ```
@@ -121,7 +121,7 @@ A predominância de scores neutros sugere que o mercado brasileiro pode ser meno
 
 1. O sentimento positivo das notícias parece ter um impacto mais significativo nos retornos de curto prazo do que o sentimento negativo.
 2. Setores como aviação e energia merecem atenção especial, dada sua sensibilidade ao sentimento das notícias.
-3. A predominância de scores neutros sugere que o mercado brasileiro pode ser menos volátil a notícias do que se poderia esperar inicialmente.
+3. A predominância de scores neutros sugere que a maioria dos títulos das notícias tende a ter uma imparcialidade maior, não querendo expor de cara o conteúdo da mesma.
 
 ## Tecnologias Utilizadas
 
@@ -134,7 +134,7 @@ A predominância de scores neutros sugere que o mercado brasileiro pode ser meno
 
 ## Contribuições
 
-Contribuições são bem-vindas! Por favor, abra uma issue para discutir mudanças propostas ou envie um pull request.
+Contribuições são bem-vindas!
 
 ## Licença
 

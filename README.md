@@ -103,19 +103,13 @@ ERJ (Embraer) lidera em sentimento positivo.
 PBR (Petrobras), AZUL, BAK (Braskem) e VALE completam o top 5.
 Essas empresas têm um equilíbrio interessante entre scores positivos, negativos e neutros, com tendência para o positivo.
 
-Conclusões Gerais
+## Conclusões Gerais
 
 Existe uma correlação mais forte entre sentimento positivo e retornos do que entre sentimento negativo e retornos.
 Embraer (ERJ) é um caso notável, com alto sentimento positivo e retornos excepcionais.
 O setor de energia (Petrobras) e aviação (Embraer, Azul) parecem ser particularmente sensíveis ao sentimento das notícias.
 A maioria das empresas tem um alto score neutro, sugerindo que o mercado brasileiro pode ser menos volátil a notícias do que se poderia esperar.
 Empresas do setor financeiro (como Itaú e Banco Bradesco) tendem a ter scores mais neutros, possivelmente refletindo uma cobertura de notícias mais equilibrada.
-
-Implicações para Investidores
-
-O sentimento positivo das notícias parece ter um impacto mais significativo nos retornos de curto prazo do que o sentimento negativo.
-Setores como aviação e energia merecem atenção especial, dada sua sensibilidade ao sentimento das notícias.
-A predominância de scores neutros sugere que o mercado brasileiro pode ser menos volátil a notícias do que se poderia esperar inicialmente.
 
 ## Implicações para Investidores
 

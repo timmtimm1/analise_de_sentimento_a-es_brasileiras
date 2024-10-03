@@ -103,7 +103,3 @@ Se encontrar erros:
 
 - Este script é para fins educacionais
 - Considere obter permissão explícita para web scraping em ambientes de produção
-
-## Contribuições
-
-Contribuições são bem-vindas! Por favor, abra uma issue ou pull request para sugestões de melhorias ou correções.

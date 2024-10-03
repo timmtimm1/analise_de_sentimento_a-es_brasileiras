@@ -67,7 +67,7 @@ SENTIMENT_ANALYSIS/
    pip install -r requirements.txt
    ```
 
-3. Execute os notebooks na seguinte ordem:
+3. Execute os arquivos na seguinte ordem:
    - `src/scraper/main.py`
    - `src/analysis/main.ipynb`
    - `src/sentiment_analysis/main.ipynb`

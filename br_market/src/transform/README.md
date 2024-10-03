@@ -97,7 +97,3 @@ Se encontrar erros:
 1. Verifique sua conexão com a internet
 2. Confirme se todas as bibliotecas estão instaladas
 3. Cheque se o arquivo de sentimentos está no diretório correto
-
-## Contribuições
-
-Contribuições são bem-vindas! Por favor, abra uma issue ou pull request para sugestões de melhorias.

@@ -1,7 +1,7 @@
 # Análise de Sentimento e Retorno de Ações Brasileiras
 
 ## Visão Geral
-Este projeto realiza uma análise abrangente de ações brasileiras, combinando web scraping, análise de sentimento de notícias e análise de retornos financeiros. O objetivo é investigar a relação entre o sentimento das notícias e o desempenho das ações no mercado brasileiro. O projeto foca no site FinViz, pois o mesmo possui uma distribuição de notícias relacionadas à ações em formato de tabela, com uma distribuição por tickers, facilitando assim o processo de extração de dados. 
+Este projeto realiza uma análise abrangente de ações brasileiras, combinando web scraping, análise de sentimento de notícias e análise de retornos financeiros. O objetivo é investigar a relação entre o sentimento das notícias e o desempenho das ações no mercado brasileiro. O projeto foca no site FinViz, pois o mesmo possui uma distribuição de notícias relacionadas à ações em formato de tabela, com uma distribuição por tickers, facilitando assim o processo de extração de dados. Vale ressaltar que as notícias são dos EUA, pois o modelo de nlp finBERT é otimizado para a língua inglesa. Por esse motivo selecionei empresas de maior porte internacional tendo como principais investidores corporações estrangeiras.
 
 ## Estrutura do Projeto
 ```
@@ -59,7 +59,7 @@ SENTIMENT_ANALYSIS/
 
 1. Clone o repositório:
    ```
-   git clone [URL do repositório]
+   git clone [https://github.com/timmtimm1/analise_de_sentimento_a-es_brasileiras]
    ```
 
 2. Instale as dependências:

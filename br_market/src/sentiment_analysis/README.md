@@ -107,7 +107,8 @@ Azul S.A. ADR                                 0.388063        0.158895       0.4
 ## Notas
 
 - A análise de sentimento é baseada apenas nos títulos das notícias
-- O modelo FinBERT é especializado em textos financeiros, mas pode não capturar nuances específicas do mercado brasileiro
+- O modelo FinBERT é especializado em textos financeiros, com limitação a apenas 512 caracteres.
+- As notícias são relacionadas ao mercado americano, com títulos e textos em INGLÊS.
 
 ## Resolução de Problemas
 
@@ -116,9 +117,3 @@ Se encontrar erros:
 2. Certifique-se de que o arquivo CSV está no formato correto e no caminho especificado
 3. Em caso de erros de memória, considere processar o DataFrame em lotes
 
-## Contribuições
-
-Contribuições são bem-vindas! Sugestões para melhorias:
-- Implementar análise do corpo completo das notícias
-- Adicionar análise temporal dos sentimentos
-- Correlacionar sentimentos com movimentos do mercado

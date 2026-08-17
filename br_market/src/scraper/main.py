@@ -1,9 +1,15 @@
+import sys
+from pathlib import Path
+
 import cloudscraper
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import random
 from datetime import datetime
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from common.paths import raw_news_path
 
 def create_scraper():
     return cloudscraper.create_scraper(browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False})
@@ -98,8 +104,9 @@ def main():
     
     today = datetime.today().strftime('%d-%m-%Y')
     df = pd.DataFrame(all_news)
-    df.to_csv(f'brazilian_stocks_{today}_news.csv', index=False)
-    print(f"Scraped {len(df)} news items. Data saved to brazilian_stocks_{today}_news.csv")
+    output_path = raw_news_path(today)
+    df.to_csv(output_path, index=False)
+    print(f"Scraped {len(df)} news items. Data saved to {output_path}")
 
 if __name__ == "__main__":
     main()

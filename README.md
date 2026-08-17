@@ -67,10 +67,17 @@ SENTIMENT_ANALYSIS/
    pip install -r requirements.txt
    ```
 
-3. Execute os arquivos na seguinte ordem:
+3. Para analisar uma única empresa automaticamente (recomendado):
+   ```
+   cd br_market/src
+   python company_pipeline.py --company "Petrobras"
+   ```
+   Basta informar o nome da empresa (ou o ticker, ex. `PBR`) — o script resolve o ticker automaticamente, coleta as notícias no FinViz, roda a análise de sentimento com FinBERT, cruza com os retornos da ação e imprime um resumo. Sem `--company`, o script pergunta interativamente. Os CSVs gerados ficam em `br_market/data/raw`, `data/processed` e `data/final`.
+
+4. Para a análise completa do mercado brasileiro (todas as ações cobertas), execute os arquivos na seguinte ordem:
    - `src/scraper/main.py`
-   - `src/analysis/main.ipynb`
    - `src/sentiment_analysis/main.ipynb`
+   - `src/transform/transform.py`
    - `src/analysis/analysis.ipynb`
 
 Resultados Principais e Análises

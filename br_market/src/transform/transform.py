@@ -1,3 +1,7 @@
+import argparse
+import sys
+from pathlib import Path
+
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -6,10 +10,19 @@ import time
 import random
 from scipy import stats
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from common import paths
+
+DEFAULT_TICKERS = ['ABEV', 'AFYA', 'ASAI', 'ATLX', 'AZUL', 'BAK', 'BBD', 'BRFS', 'BSBR', 'CIG',
+                    'CINT', 'CSAN', 'EBR', 'ELP', 'ELPC', 'ERJ', 'GGB', 'INTR', 'ITUB', 'LND',
+                    'LVRO', 'NVNI', 'PAGS', 'PBR', 'PBR-A', 'SBS', 'SGML', 'SID', 'SUZ', 'TIMB',
+                    'UGP', 'VALE', 'VINP', 'VIV', 'VSTA', 'XP', 'ZENV']
+
+
 def get_stock_data(ticker):
     stock = yf.Ticker(ticker)
     info = stock.info
-    
+
     try:
         data = {
             'Ticker': ticker,
@@ -42,10 +55,10 @@ def get_historical_data(ticker):
         return None
 
 def calculate_cumulative_return(df, ticker, date, n_days):
-    future_prices = df[(df['Ticker'] == ticker) & 
-                       (df['Date'] > date) & 
+    future_prices = df[(df['Ticker'] == ticker) &
+                       (df['Date'] > date) &
                        (df['Date'] <= date + timedelta(days=n_days))]
-    
+
     if len(future_prices) > 0:
         return (future_prices['Close'].iloc[-1] / df[df['Date'] == date]['Close'].iloc[0]) - 1
     else:
@@ -54,7 +67,7 @@ def calculate_cumulative_return(df, ticker, date, n_days):
 def parse_sentiment_date(date_str):
     if pd.isna(date_str):
         return pd.NaT
-    
+
     try:
         dt = pd.to_datetime(date_str, format='%b-%d-%y %I:%M%p')
         if dt.year > datetime.now().year:
@@ -67,11 +80,25 @@ def parse_sentiment_date(date_str):
         except ValueError:
             return pd.NaT
 
-def main():
-    tickers = ['ABEV', 'AFYA', 'ASAI', 'ATLX', 'AZUL', 'BAK', 'BBD', 'BRFS', 'BSBR', 'CIG', 
-               'CINT', 'CSAN', 'EBR', 'ELP', 'ELPC', 'ERJ', 'GGB', 'INTR', 'ITUB', 'LND', 
-               'LVRO', 'NVNI', 'PAGS', 'PBR', 'PBR-A', 'SBS', 'SGML', 'SID', 'SUZ', 'TIMB', 
-               'UGP', 'VALE', 'VINP', 'VIV', 'VSTA', 'XP', 'ZENV']
+
+def run(tickers=None, sentiment_df=None, sentiment_csv=None, date_str=None, save_outputs=True):
+    """Fetches market data for `tickers` (defaults to DEFAULT_TICKERS, i.e.
+    today's original batch behavior) and merges it with sentiment scores.
+
+    `sentiment_df` (in-memory) takes precedence over `sentiment_csv`; if
+    neither is given, falls back to reading the processed sentiment CSV for
+    `date_str` from disk (same file the sentiment_analysis step writes).
+
+    Filenames use the ticker-specific pattern when `tickers` is a single
+    explicitly-provided ticker (single-company mode); otherwise they use the
+    original batch filenames, so `python transform.py` with no args behaves
+    exactly as before.
+
+    Returns the merged DataFrame.
+    """
+    tickers = tickers or DEFAULT_TICKERS
+    date_str = date_str or paths.today_str()
+    filename_ticker = tickers[0] if len(tickers) == 1 else None
 
     all_data = []
     all_historical_data = []
@@ -81,29 +108,33 @@ def main():
         stock_data = get_stock_data(ticker)
         if stock_data:
             all_data.append(stock_data)
-        
+
         print(f"Fetching historical data for {ticker}")
         hist_data = get_historical_data(ticker)
         if hist_data is not None and not hist_data.empty:
             all_historical_data.append(hist_data)
-        
+
         time.sleep(random.uniform(0.5, 1))  # Random delay to avoid rate limiting
 
     df = pd.DataFrame(all_data)
     df_hist = pd.concat(all_historical_data, ignore_index=True)
-    
-    today = datetime.today().strftime('%d-%m-%Y')
-    current_data_filename = f'brazilian_stocks_current_data_{today}.csv'
-    historical_data_filename = f'brazilian_stocks_historical_data_{today}.csv'
-    
-    df.to_csv(current_data_filename, index=False)
-    df_hist.to_csv(historical_data_filename, index=False, date_format='%Y-%m-%d')
-    
-    print(f"Current data saved to {current_data_filename}")
-    print(f"Historical data saved to {historical_data_filename}")
+
+    if save_outputs:
+        current_data_filename = paths.current_data_path(date_str, filename_ticker)
+        historical_data_filename = paths.historical_data_path(date_str, filename_ticker)
+        df.to_csv(current_data_filename, index=False)
+        df_hist.to_csv(historical_data_filename, index=False, date_format='%Y-%m-%d')
+        print(f"Current data saved to {current_data_filename}")
+        print(f"Historical data saved to {historical_data_filename}")
 
     # Load sentiment data
-    sentiment_df = pd.read_csv(f'brazilian_stocks_news_with_finbert_sentiment_{today}.csv')
+    if sentiment_df is not None:
+        sentiment_df = sentiment_df.copy()
+    elif sentiment_csv is not None:
+        sentiment_df = pd.read_csv(sentiment_csv)
+    else:
+        sentiment_df = pd.read_csv(paths.processed_sentiment_path(date_str, filename_ticker))
+
     sentiment_df['date'] = sentiment_df['date'].apply(parse_sentiment_date)
     sentiment_df = sentiment_df.dropna(subset=['date'])
 
@@ -118,7 +149,7 @@ def main():
     # Calculate returns
     for days in [1, 3, 7]:
         merged_df[f'{days}d_Return'] = merged_df.apply(
-            lambda row: calculate_cumulative_return(df_hist, row['Ticker'], row['Date'], days), 
+            lambda row: calculate_cumulative_return(df_hist, row['Ticker'], row['Date'], days),
             axis=1
         )
 
@@ -138,10 +169,22 @@ def main():
     })
     merged_df['Date'] = pd.to_datetime(merged_df['Date'])
 
-    # Save the final merged dataframe
-    final_filename = f"brazilian_stocks_with_sentiment_and_historical_data_{today}.csv"
-    merged_df.to_csv(final_filename, index=False)
-    print(f"Final merged data saved to {final_filename}")
+    if save_outputs:
+        final_filename = paths.final_path(date_str, filename_ticker)
+        merged_df.to_csv(final_filename, index=False)
+        print(f"Final merged data saved to {final_filename}")
+
+    return merged_df
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Merge sentiment scores with market return data.")
+    parser.add_argument('--tickers', nargs='+', default=None, help="Lista de tickers (padrão: lista completa de ações BR)")
+    parser.add_argument('--ticker', default=None, help="Atalho para um único ticker")
+    args = parser.parse_args()
+
+    tickers = [args.ticker] if args.ticker else args.tickers
+    run(tickers=tickers)
 
 if __name__ == "__main__":
     main()
